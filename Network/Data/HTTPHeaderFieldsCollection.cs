@@ -20,7 +20,7 @@ using System.Collections.Generic;
 
 namespace FeedHTTP.Network
 {
-    public sealed class HTTPHeaderFieldsCollection : ICollection<HTTPHeaderField>
+    public sealed class HttpHeaderFieldsCollection : ICollection<HttpHeaderField>
     {
         /// <summary>
         /// Represent a node in a double-linked chain.
@@ -82,8 +82,8 @@ namespace FeedHTTP.Network
             /// <exception cref="ArgumentNullException">
             /// Occurs when left or right is null.
             /// </exception>
-            public static void ConnectChainNodes(DoubleLinkedChainNode<HTTPHeaderField> left,
-                DoubleLinkedChainNode<HTTPHeaderField> right)
+            public static void ConnectChainNodes(DoubleLinkedChainNode<HttpHeaderField> left,
+                DoubleLinkedChainNode<HttpHeaderField> right)
             {
                 if (left == null)
                     throw new ArgumentNullException(nameof(left));
@@ -104,7 +104,7 @@ namespace FeedHTTP.Network
             /// <exception cref="ArgumentException">
             /// Occurs when node.Next is null.
             /// </exception>
-            public static void DisconnectChainNodes(DoubleLinkedChainNode<HTTPHeaderField> node)
+            public static void DisconnectChainNodes(DoubleLinkedChainNode<HttpHeaderField> node)
             {
                 if (node == null)
                     throw new ArgumentNullException(nameof(node));
@@ -232,9 +232,9 @@ namespace FeedHTTP.Network
         }
 
         // Refers to the first element in the double-linked chain.
-        private DoubleLinkedChainNode<HTTPHeaderField> m_first; 
+        private DoubleLinkedChainNode<HttpHeaderField> m_first; 
         // Refers to the last element in the double-linked chain.
-        private DoubleLinkedChainNode<HTTPHeaderField> m_last;  
+        private DoubleLinkedChainNode<HttpHeaderField> m_last;  
         // Refers to the number of chain nodes(elements) contained in the chain(collection).
         private int m_count;
 
@@ -255,9 +255,21 @@ namespace FeedHTTP.Network
         }
 
         /// <summary>
+        /// Get the field in the collection with the given name.
+        /// </summary>
+        /// <param name="fieldName">The name of the field.</param>
+        /// <returns>
+        /// If successfully find the expected object, return that object; return null otherwise.
+        /// </returns>
+        public HttpHeaderField this[string fieldName]
+        {
+            get { return Find(fieldName); }
+        }
+
+        /// <summary>
         /// Default construct an HTTPHeaderFieldsCollection object.
         /// </summary>
-        public HTTPHeaderFieldsCollection()
+        public HttpHeaderFieldsCollection()
         {
             m_first = null;
             m_last = null;
@@ -269,7 +281,7 @@ namespace FeedHTTP.Network
         /// </summary>
         /// <param name="item">The HTTPHeaderField object to be added.</param>
         /// <exception cref="ArgumentNullException"/>
-        public void Add(HTTPHeaderField item)
+        public void Add(HttpHeaderField item)
         {
             if (item == null)
                 throw new ArgumentNullException(nameof(item));
@@ -277,15 +289,15 @@ namespace FeedHTTP.Network
             if (m_last == null)
             {
                 // There're no elements in the chain.
-                m_first = new DoubleLinkedChainNode<HTTPHeaderField>(item);
+                m_first = new DoubleLinkedChainNode<HttpHeaderField>(item);
                 m_last = m_first;
             }
             else
             {
                 // There're at least one element in the chain.
                 // Adds the newly-added element at the end of the chain.
-                DoubleLinkedChainNode<HTTPHeaderField>.ConnectChainNodes(m_last,
-                    new DoubleLinkedChainNode<HTTPHeaderField>(item));
+                DoubleLinkedChainNode<HttpHeaderField>.ConnectChainNodes(m_last,
+                    new DoubleLinkedChainNode<HttpHeaderField>(item));
                 // Updates m_last to refer to the last node in the chain, which is the newly-added
                 // chain node.
                 m_last = m_last.Next;
@@ -305,7 +317,7 @@ namespace FeedHTTP.Network
             {
                 // Disconnect the last chain node.
                 m_last = m_last.Previous;
-                DoubleLinkedChainNode<HTTPHeaderField>.DisconnectChainNodes(m_last);
+                DoubleLinkedChainNode<HttpHeaderField>.DisconnectChainNodes(m_last);
                 // Update elements counter.
                 --m_count;
             }
@@ -329,12 +341,12 @@ namespace FeedHTTP.Network
         /// <remarks>
         /// This method uses RefrenceEquals method to judge if two objects are the same.
         /// </remarks>
-        public bool Contains(HTTPHeaderField item)
+        public bool Contains(HttpHeaderField item)
         {
             if (item == null)
                 throw new ArgumentNullException(nameof(item));
 
-            foreach (HTTPHeaderField field in this)
+            foreach (HttpHeaderField field in this)
             {
                 if (ReferenceEquals(item, field))
                     return true;
@@ -358,7 +370,7 @@ namespace FeedHTTP.Network
             if (fieldName == null)
                 throw new ArgumentNullException(nameof(fieldName));
 
-            foreach (HTTPHeaderField field in this)
+            foreach (HttpHeaderField field in this)
             {
                 // The comparison of a field name is case-ignored.
                 if (string.Compare(field.Name, fieldName, true) == 0)
@@ -386,7 +398,7 @@ namespace FeedHTTP.Network
         /// Occurs when space in the target array is not big enough to hold the elements in
         /// the collection.
         /// </exception>
-        public void CopyTo(HTTPHeaderField[] array, int arrayIndex)
+        public void CopyTo(HttpHeaderField[] array, int arrayIndex)
         {
             if (array == null)
                 throw new ArgumentNullException(nameof(array));
@@ -395,7 +407,7 @@ namespace FeedHTTP.Network
             if (array.Length - arrayIndex < m_count)
                 throw new ArgumentException("Target array is too small.");
 
-            IEnumerator<HTTPHeaderField> enumrator = GetEnumerator();
+            IEnumerator<HttpHeaderField> enumrator = GetEnumerator();
             for (; arrayIndex < array.Length; ++arrayIndex)
             {
                 if (!enumrator.MoveNext())
@@ -418,12 +430,12 @@ namespace FeedHTTP.Network
         /// <remarks>
         /// The name of a field is case-ignoring.
         /// </remarks>
-        public HTTPHeaderField Find(string fieldName)
+        public HttpHeaderField Find(string fieldName)
         {
             if (fieldName == null)
                 throw new ArgumentNullException(nameof(fieldName));
 
-            foreach (HTTPHeaderField field in this)
+            foreach (HttpHeaderField field in this)
             {
                 if (string.Compare(field.Name, fieldName, true) == 0)
                     return field;
@@ -443,7 +455,7 @@ namespace FeedHTTP.Network
         /// This method uses RefrenceEquals to judge if two objects are the same.
         /// This method is probably time-consuming.
         /// </remarks>
-        public bool Remove(HTTPHeaderField item)
+        public bool Remove(HttpHeaderField item)
         {
             if (item == null)
                 throw new ArgumentNullException();
@@ -454,23 +466,23 @@ namespace FeedHTTP.Network
             }
 
             // Iterate through the chain to fetch the target node.
-            DoubleLinkedChainNode<HTTPHeaderField> current = m_first;
+            DoubleLinkedChainNode<HttpHeaderField> current = m_first;
             do
             {
                 if (ReferenceEquals(current, item))
                 {
                     // Cut the connection between current and its surrounding nodes.
-                    DoubleLinkedChainNode<HTTPHeaderField> next = current.Next;
-                    DoubleLinkedChainNode<HTTPHeaderField> prev = current.Previous;
+                    DoubleLinkedChainNode<HttpHeaderField> next = current.Next;
+                    DoubleLinkedChainNode<HttpHeaderField> prev = current.Previous;
                     if (next != null)
                     {
                         // Cut the connection between current and its next node.
-                        DoubleLinkedChainNode<HTTPHeaderField>.DisconnectChainNodes(current);
+                        DoubleLinkedChainNode<HttpHeaderField>.DisconnectChainNodes(current);
                     }
                     if (prev != null)
                     {
                         // Cut the connection between current and its previous node.
-                        DoubleLinkedChainNode<HTTPHeaderField>.DisconnectChainNodes(prev);
+                        DoubleLinkedChainNode<HttpHeaderField>.DisconnectChainNodes(prev);
                     }
                     // Update elements counter.
                     --m_count;
@@ -499,7 +511,7 @@ namespace FeedHTTP.Network
                     {
                         // Either next nor prev is null.
                         // Connect the two nodes represented by prev and next.
-                        DoubleLinkedChainNode<HTTPHeaderField>.ConnectChainNodes(prev, next);
+                        DoubleLinkedChainNode<HttpHeaderField>.ConnectChainNodes(prev, next);
                     }
 
                     return true;
@@ -513,9 +525,9 @@ namespace FeedHTTP.Network
         /// Get the enumrator of the collection.
         /// </summary>
         /// <returns>The enumrator of the collection.</returns>
-        public IEnumerator<HTTPHeaderField> GetEnumerator()
+        public IEnumerator<HttpHeaderField> GetEnumerator()
         {
-            return new DoubleLinkedChainEnumrator<HTTPHeaderField>(m_first, m_last);
+            return new DoubleLinkedChainEnumrator<HttpHeaderField>(m_first, m_last);
         }
 
         IEnumerator IEnumerable.GetEnumerator()

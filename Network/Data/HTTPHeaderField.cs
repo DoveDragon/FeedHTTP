@@ -19,7 +19,7 @@ namespace FeedHTTP.Network
     /// <summary>
     /// Represent a field in a HTTP message's header.
     /// </summary>
-    public sealed class HTTPHeaderField
+    public sealed class HttpHeaderField
     {
         /// <summary>
         /// Get the name of the field.
@@ -36,7 +36,7 @@ namespace FeedHTTP.Network
         /// </summary>
         /// <param name="name">The name of the field.</param>
         /// <param name="value">The value of the field.</param>
-        public HTTPHeaderField(string name, string value)
+        public HttpHeaderField(string name, string value)
         {
             Name = name;
             Value = value;
@@ -55,7 +55,7 @@ namespace FeedHTTP.Network
             if (ReferenceEquals(this, obj))
                 return true;
 
-            HTTPHeaderField objField = obj as HTTPHeaderField;
+            HttpHeaderField objField = obj as HttpHeaderField;
             if (objField == null)
                 return false;
 
@@ -82,7 +82,7 @@ namespace FeedHTTP.Network
         /// <param name="f1">The left-hand operand of == operator.</param>
         /// <param name="f2">The right-hand operand of == operator.</param>
         /// <returns>A value of type bool indicating if the two objects are the same.</returns>
-        public static bool operator ==(HTTPHeaderField f1, HTTPHeaderField f2)
+        public static bool operator ==(HttpHeaderField f1, HttpHeaderField f2)
         {
             if (f1 == null)
             {
@@ -104,7 +104,7 @@ namespace FeedHTTP.Network
         /// <param name="f2">The right-hand operand of != operator.</param>
         /// <returns>A value of type bool indicating if the two objects are
         /// not the same.</returns>
-        public static bool operator !=(HTTPHeaderField f1, HTTPHeaderField f2)
+        public static bool operator !=(HttpHeaderField f1, HttpHeaderField f2)
         {
             return !(f1 == f2);
         }

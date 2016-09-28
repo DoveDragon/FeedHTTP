@@ -41,8 +41,8 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Data\HTTPHeaderFieldsCollection.cs" />
-    <Compile Include="Data\HTTPHeaderField.cs" />
+    <Compile Include="Data\HttpHeaderFieldsCollection.cs" />
+    <Compile Include="Data\HttpHeaderField.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
